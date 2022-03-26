@@ -20,8 +20,8 @@ public class ManualShooterSpeed extends CommandBase {
   //FIXME Shooter RPM setpoints below for manual and auton
   static final double INCREMENT = 25.0;
   static final double ZERO_SPEED = 0;
-  static final double NEAR_SETPOINT = 3000.0;
-  static final double FAR_SETPOINT = 4000.0;
+  static final double NEAR_SETPOINT = 2000.0;
+  static final double FAR_SETPOINT = 3500.0;
 
   double rpmSetpoint = 0.0;
 

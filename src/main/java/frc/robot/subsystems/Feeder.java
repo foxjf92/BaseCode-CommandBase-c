@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -25,6 +26,7 @@ public class Feeder extends SubsystemBase {
     feedMotor = new CANSparkMax(FEED_MOTOR_CAN_ID, MotorType.kBrushless);
     feedMotor.setSmartCurrentLimit(20);
     feedTriggerSwitch1 = new DigitalInput(0);
+    feedMotor.setIdleMode(IdleMode.kBrake);
     //feedTriggerSwitch2 = new DigitalInput(1);
   }
 
@@ -33,7 +35,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public boolean ballStatus() {
-    return feedTriggerSwitch1.get();
+    return !feedTriggerSwitch1.get();
   }
 
   @Override

@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import org.checkerframework.dataflow.constantpropagation.Constant;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -11,13 +9,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-
-import edu.wpi.first.wpilibj.I2C;
 
 public class SwerveDrive extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
@@ -154,9 +150,9 @@ public class SwerveDrive extends SubsystemBase {
         } else {
             speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
         }
-
+        // setModuleStates(SwerveModuleState[] speeds);
         //FIXME Need to sort out to drive in Auton I think
-        // SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
+        // SwerveModuleState[] states = swerveKinematics.toSwerveModuleStates(speeds);
         // frontLeft.setTargetVelocity(states[0].speedMetersPerSecond, states[0].angle.getRadians());
         // frontRight.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
         // backLeft.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());

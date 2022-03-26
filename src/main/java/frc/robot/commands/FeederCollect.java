@@ -26,25 +26,22 @@ public class FeederCollect extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+    m_feeder.feed(m_feedSpeed);
 
     // if(RobotContainer.shooterController.getAButtonPressed()){
-    //   //Remove after DI logic is sorted
-    // RobotContainer.feeder.feed(.25);
+    //   m_feeder.feed(m_feedSpeed);
+    // }
 
-    //Uncomment after figuring out DI logic
-    if(RobotContainer.feeder.ballStatus()){
-      RobotContainer.feeder.feed(m_feedSpeed); 
-    }
-    else if(!RobotContainer.feeder.ballStatus()){
-      RobotContainer.feeder.feed(0.0);
-    }
-      
+    //System.out.print("Executing FeederCollect");
+    // //Remove after DI logic is sorted
+    // m_feeder.feed(m_feedSpeed);
+   
   }
   
   
@@ -52,18 +49,25 @@ public class FeederCollect extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.feeder.feed(0);
+    //System.out.print("End FeederCollect");
+    m_feeder.feed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
-    // if(RobotContainer.shooterController.getAButtonReleased()){
+    // if(RobotContainer.shooterController.getAButtonReleased() || m_feeder.ballStatus()){
     //   return true;
     // }
     // else{
     //   return false;
+    // }
+    if(m_feeder.ballStatus()){
+      return true;
     }
+
+    return false;
+  }
+
 }
 

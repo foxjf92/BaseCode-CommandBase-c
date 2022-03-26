@@ -28,7 +28,7 @@ public class IntakeHoldRetracted extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake.setExtenderCurrentLimit(1);
+    RobotContainer.intake.setExtenderCurrentLimit(10);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -12,7 +12,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 
 public class IntakeCollect extends CommandBase {
-  //private static final double EXTEND_SPEED = 0.5;
+
   private final Intake m_intake;
   private final double m_intakeSpeed;
 
@@ -29,33 +29,39 @@ public class IntakeCollect extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake.setExtenderCurrentLimit(1);
+    m_intake.setExtenderCurrentLimit(3);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(RobotContainer.shooterController.getAButtonPressed()){
-      RobotContainer.intake.setIntakeSpeed(m_intakeSpeed);
-      RobotContainer.intake.extend(.05);
-    }
+
+    //System.out.print("Executing IntakeCollect");
+    m_intake.setIntakeSpeed(m_intakeSpeed);
+    m_intake.extend(.15);
+  
   }
   
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.intake.extend(0);
+    //System.out.print("End IntakeCollect");
+    m_intake.extend(0);
+    m_intake.setIntakeSpeed(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(RobotContainer.shooterController.getAButtonReleased()){
-      return true;
-    }
-    else{
-      return false;
-    }
+    
+    return false;
+
+    // if(RobotContainer.shooterController.getAButtonReleased()){
+    //   return true;
+    // }
+    // else{
+    //   return false;
+    // }
 
   }
 }

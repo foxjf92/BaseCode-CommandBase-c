@@ -46,8 +46,8 @@ public final class Constants {
         public static final boolean kFrontRightTurningEncoderReversed = true;
         public static final boolean kBackRightTurningEncoderReversed = true;
 
-        public static final boolean kFrontLeftDriveEncoderReversed = true;
-        public static final boolean kBackLeftDriveEncoderReversed = true;
+        public static final boolean kFrontLeftDriveEncoderReversed = false;
+        public static final boolean kBackLeftDriveEncoderReversed = false;
         public static final boolean kFrontRightDriveEncoderReversed = false;
         public static final boolean kBackRightDriveEncoderReversed = false;
 
@@ -70,11 +70,11 @@ public final class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 3.63;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4;
-        public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
-                kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
-        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
+        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond/2; //was divided by 4
+        public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 
+                kPhysicalMaxAngularSpeedRadiansPerSecond/2; //was divided by 4
+        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3; //was 3
+        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3; //was 3
     }
 
     public static final class AutoConstants {
@@ -103,4 +103,13 @@ public final class Constants {
 
         public static final double kDeadband = 0.05;
     }
+
+    public static final class IntakeConstants {
+        public static final double kIntakeCollectSpeed = 0.5;
+    }
+
+    public static final class ShooterConstants {
+
+    }
+    
 }

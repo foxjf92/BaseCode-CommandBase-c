@@ -56,7 +56,7 @@ public class RobotContainer {
   private final Command m_manualShooterSpeed = new ManualShooterSpeed();
   
   //Command Groups
-  //private final ParallelCommandGroup m_collect = new Collect(intake, double intakeSpeed, feeder, feederSpeed);
+  //private final ParallelCommandGroup m_collect = new Collect(intake, intakeSpeed, feeder, feederSpeed);
   //private final ParallelCommandGroup m_shoot = new ShootBall();
 
   //Controllers
@@ -109,38 +109,21 @@ public class RobotContainer {
     //Retract Intake
     new JoystickButton(shooterController, XboxController.Button.kX.value).whileHeld(m_intakePosition);
     
-    //Collect Button
-    // new JoystickButton(shooterController, XboxController.Button.kA.value)
-    //   .whenPressed(new Collect(intake, 0.25, feeder, 0.25))
-    //   .whenReleased(new Collect(intake, 0, feeder, 0));
-
-    //Intake - Feeder and Intake
+    
     new JoystickButton(shooterController, XboxController.Button.kA.value)
-      .whileHeld(new FeederCollect(feeder, 0.5)
-      .alongWith(new IntakeCollect(intake, .25)));
+      .whenHeld(new FeederCollect(feeder, 0.5)
+      .alongWith(new IntakeCollect(intake, Constants.IntakeConstants.kIntakeCollectSpeed))
+      );
+     
 
     //Shoot - Feeder
     new JoystickButton(shooterController, XboxController.Button.kB.value)
-      .whileHeld(new FeederShoot(feeder, 1.0));
+      .whenHeld(new FeederShoot(feeder, 1.0));
 
 
     //Manual Shoot Button
     //new JoystickButton(shooterController, XboxController.Button.kB.value).whileHeld(m_manualShootCommand);
  
-    //Collect trigger
-    // new Trigger(
-    //         () -> {
-    //           return shooterController.getLeftTriggerAxis() > 0.05;
-    //         })
-    //     .whileActiveContinuous(new Collect());
-
-    // //Manual Shoot Trigger
-    // new Trigger(
-    //         () -> {
-    //           return shooterController.getRightTriggerAxis() > 0.05;    
-    //         })
-    //     .whileActiveContinuous(new ManualShootCommand());
-    
   }
 
   /**
