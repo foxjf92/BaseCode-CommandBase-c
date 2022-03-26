@@ -8,9 +8,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrive;
 
 public class ShootAndDrive extends SequentialCommandGroup {
   /**
@@ -20,7 +20,7 @@ public class ShootAndDrive extends SequentialCommandGroup {
   private final Shooter m_shooter;
   private final Feeder m_feeder;
   
-  public ShootAndDrive(DriveTrain driveTrain, Feeder feeder, Shooter shooter) {
+  public ShootAndDrive(SwerveDrive swerveDrive, Feeder feeder, Shooter shooter) {
     //m_driveTrain = driveTrain;
     m_shooter = shooter;
     m_feeder = feeder;

@@ -10,7 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.SwerveDrive;
 
 public class TurnToAngle extends CommandBase {
 
@@ -19,7 +19,7 @@ public class TurnToAngle extends CommandBase {
   double target;
 
   public TurnToAngle(double targetAngle) {
-    addRequirements(RobotContainer.driveTrain);
+    addRequirements(RobotContainer.swerveDrive);
     target = targetAngle;
   }
 
@@ -31,7 +31,7 @@ public class TurnToAngle extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    RobotContainer.driveTrain.driveHeading(new Translation2d(), target);
+    RobotContainer.swerveDrive.driveHeading(new Translation2d(), target);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -43,10 +43,10 @@ public class TurnToAngle extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.driveTrain.stop();
+    RobotContainer.swerveDrive.stopModules();
   }
 
   private double delta() {
-    return DriveTrain.angleDelta(RobotContainer.driveTrain.getAngle(), target);
+    return SwerveDrive.angleDelta(RobotContainer.swerveDrive.getAngle(), target);
   }
 }

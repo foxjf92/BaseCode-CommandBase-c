@@ -14,7 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.SwerveDrive;
 
 public class DriveXY extends CommandBase {
 
@@ -22,7 +22,7 @@ public class DriveXY extends CommandBase {
   public static final double RAMP_UP_TIME = 2.0;
   public static final double RAMP_DOWN_DISTANCE = 50;
 
-  private final DriveTrain m_driveTrain;
+  private final SwerveDrive swerveDrive;
 
   Pose2d target;
   Transform2d delta;
@@ -30,7 +30,7 @@ public class DriveXY extends CommandBase {
   double speedScale;
 
   public Transform2d getDelta() {
-    return target.minus(RobotContainer.driveTrain.getPose());
+    return target.minus(RobotContainer.swerveDrive.getPose());
   }
 
   public double getDistanceToTarget() {
@@ -39,8 +39,8 @@ public class DriveXY extends CommandBase {
 
   public DriveXY(double x, double y, double angleDegrees, double speed) {
     // Use requires() here to declare subsystem dependencies
-    m_driveTrain = RobotContainer.driveTrain;
-    addRequirements(m_driveTrain);
+    swerveDrive = RobotContainer.swerveDrive;
+    addRequirements(swerveDrive);
 
     speedScale = speed;
     target = new Pose2d(new Translation2d(x, y), Rotation2d.fromDegrees(angleDegrees));
@@ -53,7 +53,7 @@ public class DriveXY extends CommandBase {
   public void initialize() {
     startTimeMicroSeconds = RobotController.getFPGATime();
     System.out.println("Starting Drive command:");
-    System.out.println("from:" + RobotContainer.driveTrain.getPose().toString());
+    System.out.println("from:" + RobotContainer.swerveDrive.getPose().toString());
     System.out.println("to:" + target.toString());
   }
 
@@ -84,8 +84,8 @@ public class DriveXY extends CommandBase {
     translation = translation.times(scale);
 
     System.out.println("driving: " + translation.toString() + " heading: " + heading);
-    RobotContainer.driveTrain.driveHeading(translation, heading);
-    RobotContainer.driveTrain.drive(translation, 0.0, true);
+    RobotContainer.swerveDrive.driveHeading(translation, heading);
+    RobotContainer.swerveDrive.drive(translation, 0.0, true);
   }
 
 
@@ -98,7 +98,7 @@ public class DriveXY extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.driveTrain.stop();
+    RobotContainer.swerveDrive.stopModules();
     if(interrupted){
       System.out.println("interrupted move after" + getElapsedTime() + "seconds");
     }

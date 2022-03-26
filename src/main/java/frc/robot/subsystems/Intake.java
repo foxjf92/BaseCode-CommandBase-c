@@ -11,10 +11,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import org.frcteam2910.common.robot.Utilities;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.IntakeHoldRetracted;
 
 
 public class Intake extends SubsystemBase {
@@ -39,7 +37,6 @@ public class Intake extends SubsystemBase {
 
 
   public void setIntakeSpeed(double intakeSpeed) {
-    intakeSpeed = Utilities.deadband(intakeSpeed, 0.10);
     intakeMotor.set(intakeSpeed);
   }
 

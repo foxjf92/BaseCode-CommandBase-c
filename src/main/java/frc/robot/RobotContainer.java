@@ -12,9 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ClimbCommand;
-//import frc.robot.commands.Collect;
 import frc.robot.commands.DoNothing;
-import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveXY;
 import frc.robot.commands.FeederCollect;
 import frc.robot.commands.FeederShoot;
@@ -23,12 +21,13 @@ import frc.robot.commands.IntakeHoldRetracted;
 import frc.robot.commands.IntakePosition;
 import frc.robot.commands.ManualShooterSpeed;
 import frc.robot.commands.ShootAndDrive;
+import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,14 +38,15 @@ import frc.robot.subsystems.Shooter;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final Climber climber = new Climber();
-  public static final DriveTrain driveTrain = new DriveTrain();
+  public final static SwerveDrive swerveDrive = new SwerveDrive();
+  //public static final DriveTrain driveTrain = new DriveTrain();
   public static final Feeder feeder = new Feeder();
   public static final Intake intake = new Intake();
   public static final Shooter shooter = new Shooter();
   
   //Commands here
   private final Command m_climbCommand = new ClimbCommand();
-  private final Command m_driveCommand = new DriveCommand(driveTrain);
+  //private final Command m_driveCommand = new SwerveJoystickCmd(swerveDrive);
   //private final Command m_feederCollect = new FeederCollect(feeder, speed);
   //private final Command m_feederShoot = new FeederShoot(feeder);
   //private final Command m_intakeCollect = new IntakeCollect(intake, speed);
@@ -72,16 +72,23 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-
+    
     //Set default commands for subsystems
-    RobotContainer.climber.setDefaultCommand(m_climbCommand);
-    RobotContainer.driveTrain.setDefaultCommand(m_driveCommand);
+    climber.setDefaultCommand(m_climbCommand);
+    //RobotContainer.driveTrain.setDefaultCommand(m_driveCommand);
+    swerveDrive.setDefaultCommand(new SwerveJoystickCmd(
+                swerveDrive,
+                () -> -driveController.getRawAxis(1), //Left Stick Y axis
+                () -> driveController.getRawAxis(0), //Left Stick X Axis
+                () -> driveController.getRawAxis(4), //Right Stick X axis
+                () -> !driveController.getRawButton(6))); // Right Bumper Field Oriented Flag 
     //Don't want a default feeder command, tied to command groups?
     //m_feeder.setDefaultCommand(m_feederCollect); 
-    RobotContainer.intake.setDefaultCommand(m_intakeHoldRetracted);
-    RobotContainer.shooter.setDefaultCommand(m_manualShooterSpeed);
+    intake.setDefaultCommand(m_intakeHoldRetracted);
+    shooter.setDefaultCommand(m_manualShooterSpeed);
+
+    // Configure the button bindings
+    configureButtonBindings();
   }
 
   /**
@@ -150,7 +157,7 @@ public class RobotContainer {
     chooser.addOption("Forward 10", new DriveXY(10, 0, 0, 0.2));
     chooser.addOption("Forward 25", new DriveXY(25, 0, 0, 0.2));
     chooser.addOption("Forward 50", new DriveXY(50, 0, 0, 0.2));
-    chooser.addOption("Shoot and Drive", new ShootAndDrive(driveTrain, feeder, shooter));
+    chooser.addOption("Shoot and Drive", new ShootAndDrive(swerveDrive, feeder, shooter));
     chooser.setDefaultOption("Forward 100", new DriveXY(100, 0, 0, 0.2));
     chooser.addOption("Left 100", new DriveXY(0, 100, 0, 0.2));
     chooser.addOption("Turn +45", new TurnToAngle(45));
