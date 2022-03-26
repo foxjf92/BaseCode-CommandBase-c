@@ -9,17 +9,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter;
 
 public class SetShooterSpeed extends CommandBase {
   double setpoint;
   double rpmTarget;
+  private final Shooter m_shooter;
 
   public static final double tolerance = 200.0;
 
-  public SetShooterSpeed(double motorRPM) {
+  public SetShooterSpeed(Shooter shooter,double motorRPM) {
+    m_shooter = shooter;
     // Use requires() here to declare subsystem dependencies
     setpoint = motorRPM;
-    addRequirements(RobotContainer.shooter);
+    addRequirements(m_shooter);
   }
 
   // Called just before this Command runs the first time

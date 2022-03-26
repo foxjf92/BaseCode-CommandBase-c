@@ -9,16 +9,21 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Feeder;
 
 public class FeederShoot extends CommandBase {
+  private final Feeder m_feeder;
+  private final double m_feedSpeed;
   //private static final double EXTEND_SPEED = 0.5;
 
   /**
    * Creates a new Collect command.
    */
-  public FeederShoot() {
+  public FeederShoot(Feeder feeder, double feedSpeed) {
+    m_feeder = feeder;
+    m_feedSpeed = feedSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.feeder);
+    addRequirements(m_feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +34,7 @@ public class FeederShoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.feeder.feed(1.0);  
+    RobotContainer.feeder.feed(m_feedSpeed);  
   }
   
 

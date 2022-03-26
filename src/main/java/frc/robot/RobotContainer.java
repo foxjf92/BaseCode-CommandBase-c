@@ -10,23 +10,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClimbCommand;
-import frc.robot.commands.Collect;
+//import frc.robot.commands.Collect;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DriveToWallAndShoot;
 import frc.robot.commands.DriveXY;
 import frc.robot.commands.FeederCollect;
 import frc.robot.commands.FeederShoot;
 import frc.robot.commands.IntakeCollect;
 import frc.robot.commands.IntakeHoldRetracted;
 import frc.robot.commands.IntakePosition;
-import frc.robot.commands.ManualShootCommand;
 import frc.robot.commands.ManualShooterSpeed;
-import frc.robot.commands.ShootBall;
+import frc.robot.commands.ShootAndDrive;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
@@ -51,27 +47,27 @@ public class RobotContainer {
   //Commands here
   private final Command m_climbCommand = new ClimbCommand();
   private final Command m_driveCommand = new DriveCommand(driveTrain);
-  private final Command m_feederCollect = new FeederCollect();
-  private final Command m_feederShoot = new FeederShoot();
-  private final Command m_intakeCollect = new IntakeCollect();
+  //private final Command m_feederCollect = new FeederCollect(feeder, speed);
+  //private final Command m_feederShoot = new FeederShoot(feeder);
+  //private final Command m_intakeCollect = new IntakeCollect(intake, speed);
   private final Command m_intakeHoldRetracted = new IntakeHoldRetracted(intake);
   private final Command m_intakePosition = new IntakePosition();
-  private final Command m_manualShootCommand = new ManualShootCommand();
+  //private final Command m_manualShootCommand = new ManualShootCommand();
   private final Command m_manualShooterSpeed = new ManualShooterSpeed();
   
   //Command Groups
-  public final ParallelCommandGroup m_collect = new Collect();
-  public final ParallelCommandGroup m_shoot = new ShootBall();
+  //private final ParallelCommandGroup m_collect = new Collect(intake, double intakeSpeed, feeder, feederSpeed);
+  //private final ParallelCommandGroup m_shoot = new ShootBall();
 
   //Controllers
   public static XboxController driveController = new XboxController(0);
   public static XboxController shooterController = new XboxController(1);
 
   //Autons here
-//   private final Command doNothing = new DoNothing();
-//   private final Command driveToWallAndShoot = new DriveToWallAndShoot(m_drivetrain, m_shooter);
-//   private final Command driveTriangle = new DriveTriangle();
-//   private final Command driveXY = new DriveXY(x, y, angleDegrees, speed);
+  //private final Command doNothing = new DoNothing();
+  //private final Command shootAndDrive = new ShootAndDrive(driveTrain, feeder, shooter);
+  //private final Command driveTriangle = new DriveTriangle();
+  //private final Command driveXY = new DriveXY(x, y, angleDegrees, speed);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -107,12 +103,23 @@ public class RobotContainer {
     new JoystickButton(shooterController, XboxController.Button.kX.value).whileHeld(m_intakePosition);
     
     //Collect Button
-    new JoystickButton(shooterController, XboxController.Button.kA.value).whenHeld(m_collect);
+    // new JoystickButton(shooterController, XboxController.Button.kA.value)
+    //   .whenPressed(new Collect(intake, 0.25, feeder, 0.25))
+    //   .whenReleased(new Collect(intake, 0, feeder, 0));
+
+    //Intake - Feeder and Intake
+    new JoystickButton(shooterController, XboxController.Button.kA.value)
+      .whileHeld(new FeederCollect(feeder, 0.5)
+      .alongWith(new IntakeCollect(intake, .25)));
+
+    //Shoot - Feeder
+    new JoystickButton(shooterController, XboxController.Button.kB.value)
+      .whileHeld(new FeederShoot(feeder, 1.0));
+
 
     //Manual Shoot Button
-    new JoystickButton(shooterController, XboxController.Button.kB.value).whenHeld(m_manualShootCommand);
+    //new JoystickButton(shooterController, XboxController.Button.kB.value).whileHeld(m_manualShootCommand);
  
-
     //Collect trigger
     // new Trigger(
     //         () -> {
@@ -139,12 +146,12 @@ public class RobotContainer {
 
     SendableChooser<CommandBase> chooser = new SendableChooser<>();
     
-    chooser.setDefaultOption("Do Nothing", new DoNothing());
+    chooser.addOption("Do Nothing", new DoNothing());
     chooser.addOption("Forward 10", new DriveXY(10, 0, 0, 0.2));
     chooser.addOption("Forward 25", new DriveXY(25, 0, 0, 0.2));
     chooser.addOption("Forward 50", new DriveXY(50, 0, 0, 0.2));
-    chooser.addOption("Forward and Shoot", new DriveToWallAndShoot());
-    chooser.addOption("Forward 100", new DriveXY(100, 0, 0, 0.2));
+    chooser.addOption("Shoot and Drive", new ShootAndDrive(driveTrain, feeder, shooter));
+    chooser.setDefaultOption("Forward 100", new DriveXY(100, 0, 0, 0.2));
     chooser.addOption("Left 100", new DriveXY(0, 100, 0, 0.2));
     chooser.addOption("Turn +45", new TurnToAngle(45));
     chooser.addOption("Turn -90", new TurnToAngle(-90));

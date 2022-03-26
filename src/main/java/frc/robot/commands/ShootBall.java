@@ -7,32 +7,36 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Feeder;
 
-public class ShootBall extends ParallelCommandGroup {
-  public ShootBall() {
+public class ShootBall extends CommandBase {
+private final Feeder m_feeder;
+
+  public ShootBall(Feeder feeder) {
+    m_feeder = feeder;
     // Use requires() here to declare subsystem dependencies
-    addRequirements(RobotContainer.shooter);
-    addRequirements(RobotContainer.feeder);
+    //addRequirements(RobotContainer.shooter);
+    addRequirements(m_feeder);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    RobotContainer.feeder.feed(1.0);
     System.out.println("Shooting RPM = " + RobotContainer.shooter.getRpm());
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    RobotContainer.feeder.feed(1.0);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return !RobotContainer.feeder.ballStatus1();
+    return !RobotContainer.feeder.ballStatus();
   }
 
   // Called once after isFinished returns true

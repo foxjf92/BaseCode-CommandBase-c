@@ -17,11 +17,11 @@ public class ManualShooterSpeed extends CommandBase {
   /**
    * Creates a new ManualShooterCommand.
    */
-
+  //FIXME Shooter RPM setpoints below for manual and auton
   static final double INCREMENT = 25.0;
   static final double ZERO_SPEED = 0;
-  static final double NEAR_SETPOINT = 4000.0;
-  static final double FAR_SETPOINT = 6500.0;
+  static final double NEAR_SETPOINT = 3000.0;
+  static final double FAR_SETPOINT = 4000.0;
 
   double rpmSetpoint = 0.0;
 
@@ -34,6 +34,24 @@ public class ManualShooterSpeed extends CommandBase {
   @Override
   public void initialize() {
     //Checks on initilization instead of continuously?
+    //int pov = RobotContainer.shooterController.getPOV();
+    
+    // if(pov == 0) {
+    //   rpmSetpoint += INCREMENT;
+    // } else if(pov == 180) {
+    //   rpmSetpoint = ZERO_SPEED;
+    // } else if(pov == 90) {
+    //   rpmSetpoint = NEAR_SETPOINT;
+    // } else if(pov == 270) {
+    //   rpmSetpoint = FAR_SETPOINT;
+    // }
+  //  rpmSetpoint = 0.0; //I think commenting this will let shooter speed persist 
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+
     int pov = RobotContainer.shooterController.getPOV();
     
     if(pov == 0) {
@@ -45,24 +63,6 @@ public class ManualShooterSpeed extends CommandBase {
     } else if(pov == 270) {
       rpmSetpoint = FAR_SETPOINT;
     }
-  //  rpmSetpoint = 0.0; //I think commenting this will let shooter speed persist 
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-
-    // int pov = Robot.oi.shooterController.getPOV();
-    
-    // if(pov == 0) {
-    //   rpmSetpoint += INCREMENT;
-    // } else if(pov == 180) {
-    //   rpmSetpoint = ZERO_SPEED;
-    // } else if(pov == 90) {
-    //   rpmSetpoint = NEAR_SETPOINT;
-    // } else if(pov == 270) {
-    //   rpmSetpoint = FAR_SETPOINT;
-    // }
 
     rpmSetpoint = MathUtil.clamp(rpmSetpoint, 0.0, Shooter.MAX_RPM
     );
@@ -73,15 +73,6 @@ public class ManualShooterSpeed extends CommandBase {
     RobotContainer.shooter.setMotorRPM(sendValue);
     SmartDashboard.putNumber("Shooter Setpoint", rpmSetpoint);
 
-    // double feedspeed;
-    // if(Robot.shooter.ballReady()) {
-    //   feedspeed = Robot.oi.shooterController.getRawAxis(3);
-    // } else {
-    //   feedspeed = Robot.oi.shooterController.getRawAxis(2);
-    // }
-    
-    // feedspeed = Utilities.deadband(feedspeed, 0.10);
-    // Robot.shooter.setFeedSpeed(feedspeed);
   }
 
   

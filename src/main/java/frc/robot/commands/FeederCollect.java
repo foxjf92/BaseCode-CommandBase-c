@@ -9,16 +9,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Feeder;
 
 public class FeederCollect extends CommandBase {
-  //private static final double EXTEND_SPEED = 0.5;
-
+  private final Feeder m_feeder;
+  private final double m_feedSpeed;
   /**
    * Creates a new Collect command.
    */
-  public FeederCollect() {
+  public FeederCollect(Feeder feeder, double feedSpeed) {
+    m_feeder = feeder;
+    m_feedSpeed = feedSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.feeder);
+    addRequirements(m_feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -30,14 +33,20 @@ public class FeederCollect extends CommandBase {
   @Override
   public void execute() {
 
-    if(RobotContainer.feeder.ballStatus1()){
-      RobotContainer.feeder.feed(.25); 
+    // if(RobotContainer.shooterController.getAButtonPressed()){
+    //   //Remove after DI logic is sorted
+    // RobotContainer.feeder.feed(.25);
+
+    //Uncomment after figuring out DI logic
+    if(RobotContainer.feeder.ballStatus()){
+      RobotContainer.feeder.feed(m_feedSpeed); 
     }
-    else{
+    else if(!RobotContainer.feeder.ballStatus()){
       RobotContainer.feeder.feed(0.0);
     }
-    
+      
   }
+  
   
 
   // Called once the command ends or is interrupted.
@@ -50,5 +59,11 @@ public class FeederCollect extends CommandBase {
   @Override
   public boolean isFinished() {
     return true;
-  }
+    // if(RobotContainer.shooterController.getAButtonReleased()){
+    //   return true;
+    // }
+    // else{
+    //   return false;
+    }
 }
+

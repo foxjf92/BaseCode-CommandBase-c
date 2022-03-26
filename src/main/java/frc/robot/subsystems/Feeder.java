@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Feeder extends SubsystemBase {
   private final int FEED_MOTOR_CAN_ID = 11;
@@ -32,8 +32,13 @@ public class Feeder extends SubsystemBase {
     feedMotor.set(speed);
   }
 
-  public boolean ballStatus1(){
-    return !feedTriggerSwitch1.get();
+  public boolean ballStatus() {
+    return feedTriggerSwitch1.get();
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putBoolean("Ball Status", ballStatus());
   }
 
   // public boolean ballStatus2(){

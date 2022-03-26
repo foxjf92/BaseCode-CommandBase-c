@@ -14,12 +14,15 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.DriveTrain;
 
 public class DriveXY extends CommandBase {
 
   public static final double TARGET_TOLERANCE = 3.0;
   public static final double RAMP_UP_TIME = 2.0;
   public static final double RAMP_DOWN_DISTANCE = 50;
+
+  private final DriveTrain m_driveTrain;
 
   Pose2d target;
   Transform2d delta;
@@ -36,7 +39,9 @@ public class DriveXY extends CommandBase {
 
   public DriveXY(double x, double y, double angleDegrees, double speed) {
     // Use requires() here to declare subsystem dependencies
-    addRequirements(RobotContainer.driveTrain);
+    m_driveTrain = RobotContainer.driveTrain;
+    addRequirements(m_driveTrain);
+
     speedScale = speed;
     target = new Pose2d(new Translation2d(x, y), Rotation2d.fromDegrees(angleDegrees));
   }
