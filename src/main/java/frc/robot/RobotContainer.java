@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ClimbCommand;
+import frc.robot.commands.ClimbHighCommand;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.DriveXY;
 import frc.robot.commands.FeederCollect;
@@ -24,6 +25,7 @@ import frc.robot.commands.ShootAndDrive;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ClimberHigh;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -38,6 +40,7 @@ import frc.robot.subsystems.SwerveDrive;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final Climber climber = new Climber();
+  public static final ClimberHigh climberHigh = new ClimberHigh();
   public final static SwerveDrive swerveDrive = new SwerveDrive();
   //public static final DriveTrain driveTrain = new DriveTrain();
   public static final Feeder feeder = new Feeder();
@@ -46,6 +49,7 @@ public class RobotContainer {
   
   //Commands here
   private final Command m_climbCommand = new ClimbCommand();
+  private final Command m_climbHighCommand = new ClimbHighCommand();
   //private final Command m_driveCommand = new SwerveJoystickCmd(swerveDrive);
   //private final Command m_feederCollect = new FeederCollect(feeder, speed);
   //private final Command m_feederShoot = new FeederShoot(feeder);
