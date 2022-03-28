@@ -15,8 +15,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
+import org.frcteam2910.common.drivers.SwerveModule;
+import org.frcteam2910.common.robot.drivers.Mk2SwerveModuleBuilder;
+import org.frcteam2910.common.math.Vector2;
+
 public class SwerveDrive extends SubsystemBase {
-    private final SwerveModule frontLeft = new SwerveModule(
+    private final Module frontLeft = new Module(
             DriveConstants.kFrontLeftDriveMotorPort,
             DriveConstants.kFrontLeftTurningMotorPort,
             DriveConstants.kFrontLeftDriveEncoderReversed,
@@ -25,7 +29,7 @@ public class SwerveDrive extends SubsystemBase {
             DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
 
-    private final SwerveModule frontRight = new SwerveModule(
+    private final Module frontRight = new Module(
             DriveConstants.kFrontRightDriveMotorPort,
             DriveConstants.kFrontRightTurningMotorPort,
             DriveConstants.kFrontRightDriveEncoderReversed,
@@ -34,7 +38,7 @@ public class SwerveDrive extends SubsystemBase {
             DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
 
-    private final SwerveModule backLeft = new SwerveModule(
+    private final Module backLeft = new Module(
             DriveConstants.kBackLeftDriveMotorPort,
             DriveConstants.kBackLeftTurningMotorPort,
             DriveConstants.kBackLeftDriveEncoderReversed,
@@ -43,7 +47,7 @@ public class SwerveDrive extends SubsystemBase {
             DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
 
-    private final SwerveModule backRight = new SwerveModule(
+    private final Module backRight = new Module(
             DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveEncoderReversed,
@@ -55,11 +59,25 @@ public class SwerveDrive extends SubsystemBase {
     private static final double kPgain = 0.040;
     private static final double kDgain = 0.0;
 
+    // Adding in old functionality for auton
+    private static SwerveDriveKinematics kinematics;
+
+    // Remove above maybe
+
+
+
     private final AHRS gyro = new AHRS(I2C.Port.kOnboard);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0));
 
     public SwerveDrive() {
+
+        kinematics = new SwerveDriveKinematics(
+                new Translation2d(DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0),
+                new Translation2d(DriveConstants.kTrackWidth / 2.0, -DriveConstants.kWheelBase / 2.0),
+                new Translation2d(-DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0),
+                new Translation2d(-DriveConstants.kTrackWidth / 2.0, -DriveConstants.kWheelBase / 2.0));
+
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -152,10 +170,10 @@ public class SwerveDrive extends SubsystemBase {
         }
         // setModuleStates(SwerveModuleState[] speeds);
         //FIXME Need to sort out to drive in Auton I think
-        // SwerveModuleState[] states = swerveKinematics.toSwerveModuleStates(speeds);
-        // frontLeft.setTargetVelocity(states[0].speedMetersPerSecond, states[0].angle.getRadians());
-        // frontRight.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
-        // backLeft.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());
-        // backRight.setTargetVelocity(states[3].speedMetersPerSecond, states[3].angle.getRadians());
+        SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
+        frontLeft.setTargetVelocity(states[0].speedMetersPerSecond, states[0].angle.getRadians());
+        frontRight.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
+        backLeft.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());
+        backRight.setTargetVelocity(states[3].speedMetersPerSecond, states[3].angle.getRadians());
     }
 }

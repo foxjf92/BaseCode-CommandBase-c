@@ -11,9 +11,13 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;;
+import frc.robot.Constants.ModuleConstants;
 
-public class SwerveModule {
+import org.frcteam2910.common.drivers.SwerveModule;
+import org.frcteam2910.common.robot.drivers.Mk2SwerveModuleBuilder;
+import org.frcteam2910.common.math.Vector2;
+
+public class Module {
 
     private final CANSparkMax driveMotor;
     private final CANSparkMax turningMotor;
@@ -27,7 +31,9 @@ public class SwerveModule {
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
-    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
+    private final Object stateMutex = new Object();
+
+    public Module(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
 
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
@@ -101,4 +107,23 @@ public class SwerveModule {
         driveMotor.set(0);
         turningMotor.set(0);
     }
+
+    public final void setTargetVelocity(double speed, double angle) {
+        if (speed < 0.0) {
+            speed *= -1.0;
+
+            angle += Math.PI;
+        }
+
+        angle %= 2.0 * Math.PI;
+        if (angle < 0.0) {
+            angle += 2.0 * Math.PI;
+        }
+
+        synchronized (stateMutex) {
+            double targetSpeed = speed;
+            double targetAngle = angle;
+        }
+    }
+
 }
